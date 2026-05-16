@@ -19,7 +19,7 @@ export const register = async (req, res) => {
 
         const hashedpassword = await bcrypt.hash(password, 10);
 
-        const user = new User({ fullname, email, password: hashedpassword });
+        const user = new User({ fullname, email, password: hashedpassword, role : "user"  });
         const token = jwt.sign(
             { _id: user._id },
             process.env.JWT_SECRET,
@@ -39,6 +39,7 @@ export const register = async (req, res) => {
             _id: user._id,
             fullname: user.fullname,
             email: user.email,
+            role : user.role,
             message: "User registered successfully"
         });
     } catch (error) {
@@ -110,7 +111,7 @@ export const registerfoodpartner = async (req, res) => {
             return res.status(400).json({ message: "Foodpartner already exists" });
         }
         const hashedpassword = await bcrypt.hash(password, 10);
-        const user = new foodpartner({ fullname, email, password: hashedpassword });
+        const user = new foodpartner({ fullname, email, password: hashedpassword, role: "foodpartner" });
         const token = jwt.sign(
             { _id: user._id },
             process.env.JWT_SECRET,
@@ -129,6 +130,7 @@ export const registerfoodpartner = async (req, res) => {
             _id: user._id,
             fullname: user.fullname,
             email: user.email,
+            role : user.role,
             message: "Foodpartner registered successfully"
         });
     } catch (error) {

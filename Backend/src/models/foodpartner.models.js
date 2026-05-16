@@ -14,6 +14,11 @@ const foodpartnerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        enum: ["foodpartner"],
+        default: "foodpartner"
+    }
 }, { timestamps: true });
 
 const foodpartner = mongoose.model("foodpartner", foodpartnerSchema);
