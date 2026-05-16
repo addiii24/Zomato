@@ -23,7 +23,7 @@ export const authfoodpartnermiddleware = async (req, res, next) => {
         );
         if (!partner) {
             return res.status(404).json({
-                message: "User not found"
+                message: "Food partner not found. You might be logged in as a regular user instead."
             });
         }
 
