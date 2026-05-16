@@ -1,6 +1,6 @@
 import express from "express";
-import { addfood } from "../controllers/food.controller.js";
-import { authfoodpartnermiddleware } from "../middlewares/auth.middlewares.js";
+import { addfood, getfood } from "../controllers/food.controller.js";
+import { authfoodpartnermiddleware, authusermiddleaware } from "../middlewares/auth.middlewares.js";
 import multer from "multer";
 
 const upload = multer({
@@ -15,5 +15,11 @@ foodrouter.post(
     upload.single("video"),
     addfood
 );
+
+foodrouter.get(
+    "/",
+    authusermiddleaware,
+    getfood,
+)
 
 export default foodrouter;

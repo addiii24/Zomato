@@ -4,10 +4,6 @@ import { register, login, logout, registerfoodpartner, loginfoodpartner, logoutf
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.send("Hello World!");
-});
-
 // User API
 router.post("/user/register", register);
 router.post("/user/login", login);

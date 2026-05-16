@@ -61,3 +61,23 @@ export const addfood = async (req, res) => {
       });
    }
 };
+
+export const getfood = async (req, res) => {
+   try {
+
+      const foods = await food.find({});
+
+      res.status(201).json({
+         message: "Foods fetched successfully",
+         foods
+      });
+
+   } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+         message: error.message
+      });
+   }
+}
