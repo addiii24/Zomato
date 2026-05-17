@@ -1,5 +1,6 @@
 import React from 'react'
-import {BrowserRouter as Router ,Routes,Route} from "react-router-dom"
+import {BrowserRouter as Router ,Routes,Route, Navigate} from "react-router-dom";
+import Home from '../general/Home';
 import UserLogin from '../pages/UserLogin';
 import UserRegister from '../pages/UserRegister';
 import FoodPartnerLogin from '../pages/FoodPartnerLogin';
@@ -10,11 +11,12 @@ function App() {
     <>
     <Router>
         <Routes>
-            <Route path='/'/>
+            <Route path='/' element={<Navigate to="/user/login" replace />} />
             <Route path='/user/login' element={<UserLogin />}/>
             <Route path='/user/register' element={<UserRegister />}/>
             <Route path='/foodpartner/login' element={<FoodPartnerLogin />}/>
             <Route path='/foodpartner/register' element={<FoodPartnerRegister />}/>
+            <Route path='/home' element={<Home />}/>
         </Routes>
     </Router>
     </>

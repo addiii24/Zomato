@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 import axios from 'axios';
 
 const UserRegister = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
@@ -18,8 +19,9 @@ const UserRegister = () => {
         fullname,
         email,
         password
-      });
-      alert(response.data.message || "Registration successful!");
+      },
+      { withCredentials: true }); 
+      navigate('/home');
     } catch (error) {
       if (error.response && error.response.data) {
         alert(error.response.data.message);

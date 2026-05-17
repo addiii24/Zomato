@@ -1,9 +1,31 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Auth.css';
 
 const UserLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/user/login", {
+        email,
+        password
+      }, { withCredentials: true }); 
+      navigate('/home');
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.message);
+      } else {
+        alert("An error occurred during login");
+      }
+    }
+  };
 
   return (
     <div className="auth-container">
@@ -14,10 +36,10 @@ const UserLogin = () => {
           <p>Please enter your details to sign in.</p>
         </div>
         
-        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="auth-form" onSubmit={handleLogin} noValidate>
           <div className="form-group">
             <label htmlFor="email">Email address</label>
-            <input type="email" id="email" placeholder="name@example.com" />
+            <input type="email" id="email" name="email" placeholder="name@example.com" required />
           </div>
           
           <div className="form-group">
@@ -26,7 +48,9 @@ const UserLogin = () => {
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password" 
+                name="password"
                 placeholder="••••••••" 
+                required
               />
               <button 
                 type="button" 
