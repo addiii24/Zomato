@@ -102,8 +102,8 @@ export const logout = async (req, res) => {
 
 export const registerfoodpartner = async (req, res) => {
     try {
-        const { fullname, email, password } = req.body;
-        if (!fullname || !email || !password) {
+        const { buissnessname, email, password, contactnumber, address, ownername } = req.body;
+        if (!buissnessname || !email || !password || !contactnumber || !address || !ownername) {
             return res.status(400).json({ message: "All fields are required" });
         }
         const userExists = await foodpartner.findOne({ email });
@@ -111,7 +111,7 @@ export const registerfoodpartner = async (req, res) => {
             return res.status(400).json({ message: "Foodpartner already exists" });
         }
         const hashedpassword = await bcrypt.hash(password, 10);
-        const user = new foodpartner({ fullname, email, password: hashedpassword, role: "foodpartner" });
+        const user = new foodpartner({ buissnessname, email, password: hashedpassword, contactnumber, address, ownername, role: "foodpartner" });
         const token = jwt.sign(
             { _id: user._id },
             process.env.JWT_SECRET,
@@ -128,7 +128,10 @@ export const registerfoodpartner = async (req, res) => {
         await user.save();
         res.status(201).json({
             _id: user._id,
-            fullname: user.fullname,
+            buissnessname: user.buissnessname,
+            ownername: user.ownername,
+            contactnumber: user.contactnumber,
+            address: user.address,
             email: user.email,
             role : user.role,
             message: "Foodpartner registered successfully"

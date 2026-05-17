@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const foodpartnerSchema = new mongoose.Schema({
-    fullname: {
+    buissnessname: {
         type: String,
         required: true
     },
@@ -11,6 +11,18 @@ const foodpartnerSchema = new mongoose.Schema({
         unique: true
     },
     password: {
+        type: String,
+        required: true
+    },
+    contactnumber: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    ownername: {
         type: String,
         required: true
     },
