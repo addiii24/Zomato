@@ -69,9 +69,6 @@ export const authusermiddleaware = async (req, res, next) => {
             });
         }
 
-        console.log(user);
-        console.log(user.role);
-
         if (user.role !== "user") {
             return res.status(403).json({
                 message: "You are not authorized"
