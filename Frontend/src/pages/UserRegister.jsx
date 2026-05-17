@@ -1,9 +1,33 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Auth.css';
+import axios from 'axios';
 
 const UserRegister = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
+
+    const fullname = e.target.fullname.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    try {
+      const response = await axios.post("http://localhost:3000/api/auth/user/register", {
+        fullname,
+        email,
+        password
+      });
+      alert(response.data.message || "Registration successful!");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.message);
+      } else {
+        alert("An error occurred during registration");
+      }
+    }
+  }
 
   return (
     <div className="auth-container">
@@ -14,15 +38,15 @@ const UserRegister = () => {
           <p>Sign up to get started.</p>
         </div>
         
-        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label htmlFor="fullname">Full Name</label>
-            <input type="text" id="fullname" placeholder="John Doe" />
+            <input type="text" id="fullname" name="fullname" placeholder="John Doe" required />
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Email address</label>
-            <input type="email" id="email" placeholder="name@example.com" />
+            <input type="email" id="email" name="email" placeholder="name@example.com" required />
           </div>
           
           <div className="form-group">
@@ -31,7 +55,9 @@ const UserRegister = () => {
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password" 
+                name="password"
                 placeholder="••••••••" 
+                required
               />
               <button 
                 type="button" 
