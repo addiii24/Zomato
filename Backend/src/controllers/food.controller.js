@@ -64,7 +64,7 @@ export const addfood = async (req, res) => {
 
 export const getfood = async (req, res) => {
    try {
-      const foods = await food.find();
+      const foods = await food.find().populate('foodpartner');
       res.status(200).json(foods);
    } catch (error) {
       res.status(500).json({

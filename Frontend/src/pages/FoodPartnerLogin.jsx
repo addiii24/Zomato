@@ -1,9 +1,34 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
+import axios from 'axios';
 
 const FoodPartnerLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+   const navigate = useNavigate();
+  
+    const handleSubmit = async(e)=>{
+        e.preventDefault();
+    
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        
+        try {
+          const response = await axios.post("http://localhost:3000/api/auth/foodpartner/login", {
+            email,
+            password
+          },
+          { withCredentials: true }); 
+          navigate('/create-food');
+        } catch (error) {
+          if (error.response && error.response.data) {
+            alert(error.response.data.message);
+          } else {
+            alert("An error occurred during registration");
+          }
+        }
+      }
 
   return (
     <div className="auth-container">
@@ -14,7 +39,7 @@ const FoodPartnerLogin = () => {
           <p>Sign in to manage your restaurant.</p>
         </div>
         
-        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label htmlFor="email">Business Email</label>
             <input type="email" id="email" placeholder="partner@example.com" />

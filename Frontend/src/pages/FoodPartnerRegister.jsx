@@ -1,9 +1,42 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
+import axios from 'axios';
+
 
 const FoodPartnerRegister = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async(e)=>{
+      e.preventDefault();
+  
+      const buissnessname = e.target.fullname.value;
+      const ownername = e.target.ownerName.value;
+      const contactnumber = e.target.contact.value;
+      const address = e.target.address.value;
+      const email = e.target.email.value;
+      const password = e.target.password.value;
+      
+      try {
+        const response = await axios.post("http://localhost:3000/api/auth/foodpartner/register", {
+          buissnessname,
+          ownername,
+          contactnumber,
+          address,
+          email,
+          password
+        },
+        { withCredentials: true }); 
+        navigate('/create-food');
+      } catch (error) {
+        if (error.response && error.response.data) {
+          alert(error.response.data.message);
+        } else {
+          alert("An error occurred during registration");
+        }
+      }
+    }
 
   return (
     <div className="auth-container">
@@ -14,7 +47,7 @@ const FoodPartnerRegister = () => {
           <p>Register your restaurant with us.</p>
         </div>
         
-        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label htmlFor="fullname">Business Name</label>
             <input type="text" id="fullname" placeholder="Restaurant Name" />
