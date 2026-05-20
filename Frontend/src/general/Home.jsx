@@ -1,35 +1,42 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import {useNavigate, Link} from 'react-router-dom';
 
 const Reel = ({ reel }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  // Play video only when it is visible on screen
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          videoRef.current.play().catch((err) => console.log("Autoplay prevented:", err));
-          setIsPlaying(true);
-        } else {
-          videoRef.current.pause();
-          setIsPlaying(false);
-        }
-      },
-      { threshold: 0.6 } // Triggers when 60% of the video is visible
-    );
+  const navigate = useNavigate();
 
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
+ useEffect(() => {
+  const videoElement = videoRef.current;
 
-    return () => {
-      if (videoRef.current) {
-        observer.unobserve(videoRef.current);
+  if (!videoElement) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        videoElement
+          .play()
+          .catch((err) => console.log("Autoplay prevented:", err));
+
+        setIsPlaying(true);
+      } else {
+        videoElement.pause();
+        setIsPlaying(false);
       }
-    };
-  }, []);
+    },
+    { threshold: 0.6 }
+  );
+
+  observer.observe(videoElement);
+
+  return () => {
+    observer.unobserve(videoElement);
+    observer.disconnect();
+  };
+}, []);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -57,17 +64,32 @@ const Reel = ({ reel }) => {
         <div className="text-white max-w-md pointer-events-auto pl-2">
           {/* Dynamically display the uploader's business name or owner name */}
           <h3 className="font-bold text-lg mb-2">
-            @{reel.foodpartner?.buissnessname || reel.foodpartner?.ownername || 'Restaurant'}
+            @{reel.foodpartner?.ownername || 'Restaurant'}
           </h3>
           
-          {/* Truncated Description to 2 lines max */}
-          <p className="text-sm mb-4 line-clamp-2 leading-relaxed text-gray-200">
-            {reel.description}
-          </p>
+          {/* Expandable Description */}
+          <div 
+            className="mb-4 cursor-pointer"
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            <p 
+              className={`text-sm leading-relaxed text-gray-200 transition-all duration-300 ${
+                isExpanded ? "max-h-[30vh] overflow-y-auto pr-2" : "line-clamp-2"
+              }`}
+              style={{ scrollbarWidth: 'thin' }} // Adds a thin scrollbar when expanded
+            >
+              {reel.description}
+            </p>
+            {reel.description && reel.description.length > 80 && (
+              <span className="text-xs text-gray-400 font-semibold mt-1 inline-block hover:text-white">
+                {isExpanded ? "less" : "...more"}
+              </span>
+            )}
+          </div>
           
-          <button className="bg-white text-black font-semibold py-2 px-6 rounded-lg hover:bg-gray-200 transition active:scale-95 shadow-lg">
+          <Link to="/partnerprofile" className="bg-white text-black font-semibold py-2 px-6 rounded-lg hover:bg-gray-200 transition active:scale-95 shadow-lg">
             Visit Store
-          </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -131,7 +153,7 @@ const Home = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <p className="text-xl font-semibold text-white">You're all caught up!</p>
-          <p className="text-sm mt-2">No more videos to play in the database.</p>
+          <p className="text-sm mt-2">No more videos to play.</p>
         </div>
       )}
     </div>

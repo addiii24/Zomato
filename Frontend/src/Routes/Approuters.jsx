@@ -6,6 +6,7 @@ import UserRegister from '../pages/UserRegister';
 import FoodPartnerLogin from '../pages/FoodPartnerLogin';
 import FoodPartnerRegister from '../pages/FoodPartnerRegister';
 import Createfood from '../general/Createfood';
+import Partnerprofile from '../general/Partnerprofile';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path='/foodpartner/register' element={<FoodPartnerRegister />}/>
             <Route path='/home' element={<Home />}/>
             <Route path='/create-food' element={<Createfood />} />
+            <Route path='/partnerprofile' element={<Partnerprofile />} />
         </Routes>
     </Router>
     </>
