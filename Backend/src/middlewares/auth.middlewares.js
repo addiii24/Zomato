@@ -85,3 +85,43 @@ export const authusermiddleaware = async (req, res, next) => {
         });
     }
 }
+
+export const authanyusermiddleware = async (req, res, next) => {
+    try {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.status(401).json({
+                message: "Unauthorized access"
+            });
+        }
+
+        const decodedToken = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        // Try user first
+        const user = await User.findById(decodedToken._id);
+        if (user && user.role === "user") {
+            req.user = user;
+            return next();
+        }
+
+        // Try foodpartner
+        const partner = await foodpartner.findById(decodedToken._id);
+        if (partner && partner.role === "foodpartner") {
+            req.foodpartner = partner;
+            return next();
+        }
+
+        return res.status(404).json({
+            message: "User or Food Partner not found"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};

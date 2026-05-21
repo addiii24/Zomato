@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import '../pages/Auth.css';
 
 const Partnerprofile = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [partnerInfo, setPartnerInfo] = useState({
@@ -11,24 +14,51 @@ const Partnerprofile = () => {
   });
 
   useEffect(() => {
-    // Fetch videos to populate the grid
-    axios.get("http://localhost:3000/api/food", { withCredentials: true })
+    const url = id 
+      ? `http://localhost:3000/api/food/partner/${id}`
+      : "http://localhost:3000/api/food/partner";
+
+    axios.get(url, { withCredentials: true })
       .then(res => {
-        setVideos(res.data);
-        if (res.data.length > 0 && res.data[0].foodpartner) {
-           setPartnerInfo({
-             businessName: res.data[0].foodpartner.buissnessname || res.data[0].foodpartner.ownername || "Business Name",
-             address: res.data[0].foodpartner.address || "Address"
-           });
+        if (id) {
+          // The new endpoint returns { partner, foods }
+          setVideos(res.data.foods || []);
+          if (res.data.partner) {
+            setPartnerInfo({
+              businessName: res.data.partner.buissnessname || res.data.partner.ownername || "Business Name",
+              address: res.data.partner.address || "Address"
+            });
+          }
+        } else {
+          // The original endpoint returns an array of foods [ ... ]
+          setVideos(res.data || []);
+          if (res.data.length > 0 && res.data[0].foodpartner) {
+             setPartnerInfo({
+               businessName: res.data[0].foodpartner.buissnessname || res.data[0].foodpartner.ownername || "Business Name",
+               address: res.data[0].foodpartner.address || "Address"
+             });
+          }
         }
       })
       .catch(err => console.error(err));
-  }, []);
+  }, [id]);
 
 
 
   return (
-    <div className="min-h-screen flex justify-center p-4 sm:p-8" style={{ backgroundColor: 'var(--bg-color)' }}>
+    <div className="min-h-screen flex justify-center p-4 sm:p-8 relative" style={{ backgroundColor: 'var(--bg-color)' }}>
+      {/* Back Button */}
+      <button 
+        onClick={() => navigate(id ? "/home" : "/create-food")}
+        className="absolute top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-full shadow-lg transition hover:scale-105 z-10"
+        style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)', border: '1px solid var(--input-border)' }}
+        title={id ? "Back to Home" : "Back to Dashboard"}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      </button>
+
       {/* Profile Card Container matching the layout shape */}
       <div 
         className="w-full max-w-md rounded-[2rem] overflow-hidden flex flex-col shadow-2xl"

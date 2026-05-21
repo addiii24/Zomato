@@ -87,7 +87,7 @@ const Reel = ({ reel }) => {
             )}
           </div>
           
-          <Link to="/partnerprofile" className="bg-white text-black font-semibold py-2 px-6 rounded-lg hover:bg-gray-200 transition active:scale-95 shadow-lg">
+          <Link to={`/partnerprofile/${reel.foodpartner?._id}`} className="bg-white text-black font-semibold py-2 px-6 rounded-lg hover:bg-gray-200 transition active:scale-95 shadow-lg">
             Visit Store
           </Link>
         </div>

@@ -1,4 +1,5 @@
 import food from "../models/food.model.js";
+import foodpartner from "../models/foodpartner.models.js";
 import { v4 as uuid } from "uuid";
 import { uploadOnImageKit } from "../services/storage.services.js";
 
@@ -77,6 +78,29 @@ export const getpartnerfood = async (req, res) => {
    try {
       const foods = await food.find({ foodpartner: req.foodpartner._id }).populate('foodpartner');
       res.status(200).json(foods);
+   } catch (error) {
+      res.status(500).json({
+         message: error.message
+      });
+   }
+}
+
+export const getpartnerfoodbyid = async (req, res) => {
+   try {
+      const { id } = req.params;
+      
+      const partner = await foodpartner.findById(id).select("-password");
+      if (!partner) {
+         return res.status(404).json({
+            message: "Food partner not found"
+         });
+      }
+
+      const foods = await food.find({ foodpartner: id }).populate('foodpartner');
+      res.status(200).json({
+         partner,
+         foods
+      });
    } catch (error) {
       res.status(500).json({
          message: error.message

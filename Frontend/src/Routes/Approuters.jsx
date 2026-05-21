@@ -20,7 +20,7 @@ function App() {
             <Route path='/foodpartner/register' element={<FoodPartnerRegister />}/>
             <Route path='/home' element={<Home />}/>
             <Route path='/create-food' element={<Createfood />} />
-            <Route path='/partnerprofile' element={<Partnerprofile />} />
+            <Route path='/partnerprofile/:id?' element={<Partnerprofile />} />
         </Routes>
     </Router>
     </>
