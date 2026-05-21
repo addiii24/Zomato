@@ -72,3 +72,14 @@ export const getfood = async (req, res) => {
       });
    }
 }
+
+export const getpartnerfood = async (req, res) => {
+   try {
+      const foods = await food.find({ foodpartner: req.foodpartner._id }).populate('foodpartner');
+      res.status(200).json(foods);
+   } catch (error) {
+      res.status(500).json({
+         message: error.message
+      });
+   }
+}
