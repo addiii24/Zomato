@@ -11,20 +11,13 @@ import cors from "cors";
 
 
 const app = express();
+app.set('trust proxy', 1);
+
 app.use(cors({
-    origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps or curl/postman)
-        if (!origin) return callback(null, true);
-        
-        // Dynamically allow any localhost port or matching FRONTEND_URL
-        const isLocalhost = /^http:\/\/localhost:\d+$/.test(origin);
-        if (isLocalhost || origin === process.env.FRONTEND_URL) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true
+    origin:true,
+    credentials:true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
 app.use(cookieParser());
