@@ -33,7 +33,7 @@ const CommentDrawer = ({ foodId, isOpen, onClose, commentCount, setCommentCount 
   const fetchComments = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:3000/api/comments/${foodId}`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/comments/${foodId}`, {
         withCredentials: true
       });
       setComments(res.data.comments);
@@ -50,7 +50,7 @@ const CommentDrawer = ({ foodId, isOpen, onClose, commentCount, setCommentCount 
     setSubmitting(true);
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/comments/${foodId}`,
+        `${import.meta.env.VITE_API_URL}/api/comments/${foodId}`,
         { text: newComment.trim() },
         { withCredentials: true }
       );
@@ -68,7 +68,7 @@ const CommentDrawer = ({ foodId, isOpen, onClose, commentCount, setCommentCount 
   const handleDelete = async (commentId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/comments/${commentId}`,
+        `${import.meta.env.VITE_API_URL}/api/comments/${commentId}`,
         { withCredentials: true }
       );
       setComments(prev => prev.filter(c => c._id !== commentId));
@@ -227,7 +227,7 @@ const ActionSidebar = ({ reel }) => {
 
   useEffect(() => {
     // Fetch initial like status
-    axios.get(`http://localhost:3000/api/likes/${reel._id}/status`, {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/likes/${reel._id}/status`, {
       withCredentials: true
     }).then(res => {
       setLiked(res.data.liked);
@@ -235,7 +235,7 @@ const ActionSidebar = ({ reel }) => {
     }).catch(err => console.log(err));
 
     // Fetch initial comment count
-    axios.get(`http://localhost:3000/api/comments/${reel._id}`, {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/comments/${reel._id}`, {
       withCredentials: true
     }).then(res => {
       setCommentCount(res.data.totalComments);
@@ -251,7 +251,7 @@ const ActionSidebar = ({ reel }) => {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/likes/${reel._id}/toggle`,
+        `${import.meta.env.VITE_API_URL}/api/likes/${reel._id}/toggle`,
         {},
         { withCredentials: true }
       );
@@ -435,7 +435,7 @@ const Home = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3000/api/auth/user/logout", {}, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/user/logout`, {}, {
         withCredentials: true
       });
       navigate("/");
@@ -446,7 +446,7 @@ const Home = () => {
 
   useEffect(() => {
     // Corrected the URL from /api/auth/food to /api/food
-    axios.get("http://localhost:3000/api/food", {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/food`, {
       withCredentials: true 
     }).then(response => {
       // The backend returns the array directly, so it's response.data

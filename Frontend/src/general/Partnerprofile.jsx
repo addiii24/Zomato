@@ -15,8 +15,8 @@ const Partnerprofile = () => {
 
   useEffect(() => {
     const url = id 
-      ? `http://localhost:3000/api/food/partner/${id}`
-      : "http://localhost:3000/api/food/partner";
+      ? `${import.meta.env.VITE_API_URL}/api/food/partner/${id}`
+      : `${import.meta.env.VITE_API_URL}/api/food/partner`;
 
     axios.get(url, { withCredentials: true })
       .then(res => {
@@ -47,8 +47,8 @@ const Partnerprofile = () => {
     try {
       // If viewing own profile (no id param), logout as food partner; otherwise as user
       const logoutUrl = id 
-        ? "http://localhost:3000/api/auth/user/logout"
-        : "http://localhost:3000/api/auth/foodpartner/logout";
+        ? `${import.meta.env.VITE_API_URL}/api/auth/user/logout`
+        : `${import.meta.env.VITE_API_URL}/api/auth/foodpartner/logout`;
       await axios.post(logoutUrl, {}, { withCredentials: true });
       navigate("/");
     } catch (error) {

@@ -18,7 +18,7 @@ const Createfood = () => {
     formData.append('video', e.target.video.files[0]);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/food", formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/food`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },

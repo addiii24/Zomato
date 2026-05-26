@@ -32,7 +32,7 @@ export const register = async (req, res) => {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "strict"
+            sameSite: "none"
         })
         await user.save();
         res.status(201).json({
@@ -72,7 +72,7 @@ export const login = async (req, res) => {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "strict"
+            sameSite: "none"
         })
         await user.save();
         res.status(200).json({
@@ -92,7 +92,7 @@ export const logout = async (req, res) => {
             maxAge: 0,
             httpOnly: true,
             secure: true,
-            sameSite: "strict"
+            sameSite: "none"
         })
         res.status(200).json({message: "User logged out successfully"});
     } catch (error) {
@@ -123,7 +123,7 @@ export const registerfoodpartner = async (req, res) => {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "strict"
+            sameSite: "none"
         })
         await user.save();
         res.status(201).json({
@@ -166,7 +166,7 @@ export const loginfoodpartner = async (req, res) => {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "strict"
+            sameSite: "none"
         })
         await user.save();
         res.status(200).json({
@@ -186,7 +186,7 @@ export const logoutfoodpartner = async (req, res) => {
             maxAge: 0,
             httpOnly: true,
             secure: true,
-            sameSite: "strict"
+            sameSite: "none"
         })
         res.status(200).json({message: "User logged out successfully"});
     } catch (error) {
