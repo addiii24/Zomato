@@ -43,7 +43,18 @@ const Partnerprofile = () => {
       .catch(err => console.error(err));
   }, [id]);
 
-
+  const handleLogout = async () => {
+    try {
+      // If viewing own profile (no id param), logout as food partner; otherwise as user
+      const logoutUrl = id 
+        ? "http://localhost:3000/api/auth/user/logout"
+        : "http://localhost:3000/api/auth/foodpartner/logout";
+      await axios.post(logoutUrl, {}, { withCredentials: true });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex justify-center p-4 sm:p-8 relative" style={{ backgroundColor: 'var(--bg-color)' }}>
@@ -57,6 +68,19 @@ const Partnerprofile = () => {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
+      </button>
+
+      {/* Logout Button */}
+      <button 
+        onClick={handleLogout}
+        className="absolute top-4 right-4 sm:top-8 sm:right-8 flex items-center gap-2 px-4 py-3 rounded-full shadow-lg transition hover:scale-105 z-10"
+        style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)', border: '1px solid var(--input-border)' }}
+        title="Logout"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+        </svg>
+        <span className="text-sm font-semibold hidden sm:inline">Logout</span>
       </button>
 
       {/* Profile Card Container matching the layout shape */}
