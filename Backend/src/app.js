@@ -2,6 +2,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import router from './routes/auth.routes.js';
 import foodrouter from './routes/food.routes.js';
+import likeRouter from './routes/like.routes.js';
+import commentRouter from './routes/comment.routes.js';
 import cors from "cors";
 
 
@@ -19,5 +21,7 @@ app.get('/', (req, res) => {
 
 app.use("/api/auth", router);
 app.use("/api/food", foodrouter);
+app.use("/api/likes", likeRouter);
+app.use("/api/comments", commentRouter);
 
 export default app;

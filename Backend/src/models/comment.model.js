@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
-const likeSchema = new mongoose.Schema({
-
+const commentSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -11,11 +10,14 @@ const likeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "foodmodel",
         required: true
+    },
+    text: {
+        type: String,
+        required: true,
+        maxlength: 500
     }
 }, { timestamps: true });
 
-likeSchema.index({ user: 1, food: 1 }, { unique: true });
+const Comment = mongoose.model("Comment", commentSchema);
 
-const likes = mongoose.model("likes", likeSchema);
-
-export default likes;
+export default Comment;
