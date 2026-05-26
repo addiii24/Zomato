@@ -12,10 +12,18 @@ import cors from "cors";
 
 const app = express();
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        process.env.FRONTEND_URL
-    ].filter(Boolean),
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl/postman)
+        if (!origin) return callback(null, true);
+        
+        // Dynamically allow any localhost port or matching FRONTEND_URL
+        const isLocalhost = /^http:\/\/localhost:\d+$/.test(origin);
+        if (isLocalhost || origin === process.env.FRONTEND_URL) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
 app.use(express.json());
