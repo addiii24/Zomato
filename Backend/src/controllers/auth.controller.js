@@ -4,6 +4,16 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import foodpartner from "../models/foodpartner.models.js";
 
+const getCookieOptions = (req, maxAge) => {
+    const isProduction = process.env.NODE_ENV === "production" || req.headers["x-forwarded-proto"] === "https";
+    return {
+        maxAge: maxAge,
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax"
+    };
+};
+
 export const register = async (req, res) => {
     try {
         const { fullname, email, password } = req.body;
@@ -28,12 +38,7 @@ export const register = async (req, res) => {
             }
         );
 
-        res.cookie("token", token, {
-            maxAge: 60 * 60 * 1000,
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        })
+        res.cookie("token", token, getCookieOptions(req, 60 * 60 * 1000));
         await user.save();
         res.status(201).json({
             _id: user._id,
@@ -57,7 +62,7 @@ export const login = async (req, res) => {
         if(!user){
             return res.status(400).json({message: "User not found"});
         }
-        const isPasswordCorrect = bcrypt.compare(password, user.password);
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(!isPasswordCorrect){
             return res.status(400).json({message: "Invalid email or password"});
         }
@@ -68,12 +73,7 @@ export const login = async (req, res) => {
                 expiresIn: "1h"
             }
         );
-        res.cookie("token", token, {
-            maxAge: 60 * 60 * 1000,
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        })
+        res.cookie("token", token, getCookieOptions(req, 60 * 60 * 1000));
         await user.save();
         res.status(200).json({
             _id: user._id,
@@ -82,18 +82,13 @@ export const login = async (req, res) => {
             message: "User logged in successfully"
         });
     } catch (error) {
-        
+        res.status(500).json({ message: error.message });
     }
 };
 
 export const logout = async (req, res) => {
     try {
-        res.cookie("token", "", {
-            maxAge: 0,
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        })
+        res.cookie("token", "", getCookieOptions(req, 0));
         res.status(200).json({message: "User logged out successfully"});
     } catch (error) {
         res.status(500).json({message: error.message});
@@ -119,12 +114,7 @@ export const registerfoodpartner = async (req, res) => {
                 expiresIn: "1h"
             }
         );
-        res.cookie("token", token, {
-            maxAge: 60 * 60 * 1000,
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        })
+        res.cookie("token", token, getCookieOptions(req, 60 * 60 * 1000));
         await user.save();
         res.status(201).json({
             _id: user._id,
@@ -151,7 +141,7 @@ export const loginfoodpartner = async (req, res) => {
         if(!user){
             return res.status(400).json({message: "User not found"});
         }
-        const isPasswordCorrect = bcrypt.compare(password, user.password);
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(!isPasswordCorrect){
             return res.status(400).json({message: "Invalid email or password"});
         }
@@ -162,16 +152,12 @@ export const loginfoodpartner = async (req, res) => {
                 expiresIn: "1h"
             }
         );
-        res.cookie("token", token, {
-            maxAge: 60 * 60 * 1000,
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        })
+        res.cookie("token", token, getCookieOptions(req, 60 * 60 * 1000));
         await user.save();
         res.status(200).json({
             _id: user._id,
-            fullname: user.fullname,
+            buissnessname: user.buissnessname,
+            ownername: user.ownername,
             email: user.email,
             message: "User logged in successfully"
         });
@@ -182,12 +168,7 @@ export const loginfoodpartner = async (req, res) => {
 
 export const logoutfoodpartner = async (req, res) => {
     try {
-        res.cookie("token", "", {
-            maxAge: 0,
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        })
+        res.cookie("token", "", getCookieOptions(req, 0));
         res.status(200).json({message: "User logged out successfully"});
     } catch (error) {
         res.status(500).json({message: error.message});

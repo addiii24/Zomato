@@ -42,7 +42,7 @@ const FoodPartnerLogin = () => {
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label htmlFor="email">Business Email</label>
-            <input type="email" id="email" placeholder="partner@example.com" />
+            <input type="email" id="email" name="email" placeholder="partner@example.com" required />
           </div>
           
           <div className="form-group">
@@ -51,7 +51,9 @@ const FoodPartnerLogin = () => {
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password" 
+                name="password"
                 placeholder="••••••••" 
+                required
               />
               <button 
                 type="button" 

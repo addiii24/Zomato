@@ -50,27 +50,27 @@ const FoodPartnerRegister = () => {
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label htmlFor="fullname">Business Name</label>
-            <input type="text" id="fullname" placeholder="Restaurant Name" />
+            <input type="text" id="fullname" name="fullname" placeholder="Restaurant Name" required />
           </div>
 
           <div className="form-group">
             <label htmlFor="ownerName">Owner Name</label>
-            <input type="text" id="ownerName" placeholder="John Doe" />
+            <input type="text" id="ownerName" name="ownerName" placeholder="John Doe" required />
           </div>
 
           <div className="form-group">
             <label htmlFor="contact">Contact Number</label>
-            <input type="tel" id="contact" placeholder="+1 (555) 000-0000" />
+            <input type="tel" id="contact" name="contact" placeholder="+1 (555) 000-0000" required />
           </div>
 
           <div className="form-group">
             <label htmlFor="address">Address</label>
-            <input type="text" id="address" placeholder="123 Main St, City" />
+            <input type="text" id="address" name="address" placeholder="123 Main St, City" required />
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Business Email</label>
-            <input type="email" id="email" placeholder="partner@example.com" />
+            <input type="email" id="email" name="email" placeholder="partner@example.com" required />
           </div>
           
           <div className="form-group">
@@ -79,7 +79,9 @@ const FoodPartnerRegister = () => {
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password" 
+                name="password"
                 placeholder="••••••••" 
+                required
               />
               <button 
                 type="button" 
